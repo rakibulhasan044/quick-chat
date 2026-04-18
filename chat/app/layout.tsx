@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SessionProvider from "@/provider/SessionProvider";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,9 +32,9 @@ export default function RootLayout({
     >
       <SessionProvider>
         <body className="min-h-full flex flex-col">
-          <Toaster richColors duration={1000}/>
+          <Toaster richColors duration={1000} />
           {children}
-          </body>
+        </body>
       </SessionProvider>
     </html>
   );
