@@ -6,6 +6,7 @@ export default async function dashboard() {
   const session: CustomSession | null = await getServerSession(authOption);
   return (
     <div>
+      <p>{JSON.stringify(session)}</p>
       <DashNav
         name={session?.user?.name ?? "Guest"}
         image={session?.user?.image ?? undefined}
