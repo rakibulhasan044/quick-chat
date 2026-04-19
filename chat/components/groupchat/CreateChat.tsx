@@ -24,6 +24,7 @@ import { CustomUser } from "@/app/api/auth/[...nextauth]/options";
 import axios, { AxiosError } from "axios";
 import { CHAT_GROUP_URL } from "@/lib/apiEndPoints";
 import { toast } from "sonner";
+import { clearCache } from "@/src/actions/common";
 
 export default function CreateChat({ user }: { user: CustomUser }) {
   const [open, setOpen] = useState(false);
@@ -51,6 +52,7 @@ export default function CreateChat({ user }: { user: CustomUser }) {
         },
       );
       if (data?.message) {
+        clearCache('dashboard')
         setLoading(false);
         setOpen(false);
         toast.success(data?.message);
@@ -60,21 +62,17 @@ export default function CreateChat({ user }: { user: CustomUser }) {
       if (error instanceof AxiosError) {
       }
     }
-
     reset();
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger render={<Button variant="outline">Create Group</Button>} />
-
       <DialogContent className="sm:max-w-sm">
-        {/* ✅ form MUST be inside DialogContent */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Create your new chat</DialogTitle>
           </DialogHeader>
-
           <FieldGroup>
             <Field>
               <Label>Title</Label>
@@ -83,7 +81,6 @@ export default function CreateChat({ user }: { user: CustomUser }) {
                 <p className="text-red-500 text-sm">{errors.title.message}</p>
               )}
             </Field>
-
             <Field>
               <Label>Passcode</Label>
               <Input {...register("passcode")} />
@@ -94,10 +91,8 @@ export default function CreateChat({ user }: { user: CustomUser }) {
               )}
             </Field>
           </FieldGroup>
-
           <DialogFooter>
             <DialogClose render={<Button variant="outline">Cancel</Button>} />
-
             <Button type="submit" disabled={loading}>
               {loading ? "processing" : "Create"}
             </Button>

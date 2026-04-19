@@ -32,7 +32,7 @@ export default function RootLayout({
     >
       <SessionProvider>
         <body className="min-h-full flex flex-col">
-          <Toaster richColors duration={1000} />
+          <Toaster richColors />
           {children}
         </body>
       </SessionProvider>

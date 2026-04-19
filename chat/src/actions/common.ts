@@ -2,5 +2,7 @@
 import { revalidateTag } from "next/cache";
 
 export async function clearCache(tag: string) {
-  revalidateTag(tag, "default");
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (revalidateTag as any)(tag);
 }

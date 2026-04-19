@@ -5,6 +5,15 @@ import cors from "cors";
 const app: Application = express();
 const PORT = process.env.PORT || 7000;
 import Routes from "./routes/index.js";
+import {Server} from "socket.io"
+import { createServer } from "http";
+
+const server =createServer(app)
+export const io = new Server(server, {
+  cors: {
+    origin: "*"
+  }
+})
 
 // * Middleware
 app.use(cors());
@@ -17,4 +26,4 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api", Routes)
 
-app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
+server.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));

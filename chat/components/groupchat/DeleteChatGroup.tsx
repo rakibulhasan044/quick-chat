@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,14 +35,14 @@ export default function DeleteChatGroup({
         },
       });
       if (data?.message) {
-        clearCache("dashboard");
+        await clearCache("dashboard");
         toast.success(data?.message);
         setOpen(false);
       }
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.error("Somethign went wrong.please try again later.");
+      toast.error("Something went wrong.please try again later.");
     }
   };
 
