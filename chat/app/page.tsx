@@ -8,6 +8,7 @@ import { authOption, CustomSession } from "./api/auth/[...nextauth]/options";
 
 export default async function Home() {
   const session: CustomSession | null = await getServerSession(authOption);
+
   return (
     <div className="min-h-screen flex flex-col ">
       {/* Header */}

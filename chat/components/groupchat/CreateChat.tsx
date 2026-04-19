@@ -20,8 +20,12 @@ import {
   createChatSchema,
   createChatSchemaType,
 } from "@/src/validations/groupChatValidation";
+import { CustomUser } from "@/app/api/auth/[...nextauth]/options";
+import axios, { AxiosError } from "axios";
+import { CHAT_GROUP_URL } from "@/lib/apiEndPoints";
+import { toast } from "sonner";
 
-export default function CreateChat() {
+export default function CreateChat({ user }: { user: CustomUser }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -34,23 +38,35 @@ export default function CreateChat() {
     resolver: zodResolver(createChatSchema),
   });
 
-  const onSubmit = async (data: createChatSchemaType) => {
-    setLoading(true);
-    console.log(data);
-
-    // simulate api
-    setTimeout(() => {
+  const onSubmit = async (payload: createChatSchemaType) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        CHAT_GROUP_URL,
+        { ...payload, user_id: user.id },
+        {
+          headers: {
+            Authorization: user.token,
+          },
+        },
+      );
+      if (data?.message) {
+        setLoading(false);
+        setOpen(false);
+        toast.success(data?.message);
+      }
+    } catch (error) {
       setLoading(false);
-      reset(); 
-      setOpen(false);
-    }, 1000);
+      if (error instanceof AxiosError) {
+      }
+    }
+
+    reset();
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={<Button variant="outline">Create Group</Button>}
-      />
+      <DialogTrigger render={<Button variant="outline">Create Group</Button>} />
 
       <DialogContent className="sm:max-w-sm">
         {/* ✅ form MUST be inside DialogContent */}
@@ -64,9 +80,7 @@ export default function CreateChat() {
               <Label>Title</Label>
               <Input {...register("title")} />
               {errors.title && (
-                <p className="text-red-500 text-sm">
-                  {errors.title.message}
-                </p>
+                <p className="text-red-500 text-sm">{errors.title.message}</p>
               )}
             </Field>
 
@@ -82,9 +96,7 @@ export default function CreateChat() {
           </FieldGroup>
 
           <DialogFooter>
-            <DialogClose
-              render={<Button variant="outline">Cancel</Button>}
-            />
+            <DialogClose render={<Button variant="outline">Cancel</Button>} />
 
             <Button type="submit" disabled={loading}>
               {loading ? "processing" : "Create"}
