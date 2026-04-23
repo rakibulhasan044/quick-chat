@@ -12,7 +12,7 @@ export default async function Chat({
   return (
     <div>
       <h1>Hello!!</h1>
-      <ChatBase />
+      <ChatBase groupId={id} />
     </div>
   );
 }
